@@ -15,8 +15,10 @@ setup(
         'Programming Language :: Python :: 3.6',
     ],
     install_requires=[
-        'SQLAlchemy==1.2.12',
         'flask-socketio==3.0.2',
+        'flask-sqlalchemy==2.3.2',
+        'flask-marshmallow==0.9.0',
+        'marshmallow-sqlalchemy==0.14.1',
         'eventlet==0.24.1'
     ]
 )

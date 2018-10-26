@@ -14,7 +14,7 @@ socket.on('update', function(data){
     if(logged_in_user.name == "")
         return;
 
-    $.each(JSON.parse(data), function(index, user) {
+    $.each(data, function(index, user) {
         var name_ = user.name;
         if($('#'+name_).length == 0) {
             var myNewElement_  = $("<div></div>", {html: user.name, id: name_});
