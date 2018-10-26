@@ -1,4 +1,7 @@
-.PHONY: serve
+.PHONY: serve drop-db
 
 serve:
-	python server.py
+	cd whos_in; python server.py
+
+drop-db:
+	rm whos_in/whos_in.db

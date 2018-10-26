@@ -2,7 +2,7 @@ import json
 from flask import Flask, render_template, url_for, request
 from flask_socketio import SocketIO, emit
 
-import data as local_data
+import whos_in.data as local_data
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret!'
@@ -57,5 +57,6 @@ if __name__ == '__main__':
     sio.run(
         app, 
         debug=True, 
-        use_reloader=True
+        use_reloader=True,
+        host='0.0.0.0'
     )
