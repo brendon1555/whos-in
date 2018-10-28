@@ -17,10 +17,11 @@ socket.on('update', function(data){
     $.each(data, function(index, user) {
         var name_ = user.name;
         if($('#'+name_).length == 0) {
-            var myNewElement_  = $("<div></div>", {html: user.name, id: name_});
-            myNewElement_.addClass("alert");
-            myNewElement_.addClass("d-flex");
-            myNewElement_.addClass("justify-content-between");
+            var myNewElement_  = $("<div/>", {
+                html: user.name, 
+                id: name_,
+                "class": "alert d-flex justify-content-between"
+            });
 
             if(user.is_in) {
                 myNewElement_.addClass("alert-success");
@@ -31,9 +32,11 @@ socket.on('update', function(data){
 
             if(name_ == logged_in_user.name) {
 
-                var toggleButton_ = $("<button type=\"button\">Toggle</button>");
-                toggleButton_.addClass("btn");
-                toggleButton_.addClass("btn-sm");
+                var toggleButton_ = $("<button/>", {
+                    text: "Toggle",
+                    type: "button",
+                    "class": "btn btn-sm"
+                });
 
                 if(user.is_in) {
                     toggleButton_.addClass("btn-danger");
