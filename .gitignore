@@ -107,3 +107,4 @@ whos_in.db
 .vscode/
 
 client/closure-library
+client/renaming-maps
