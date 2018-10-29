@@ -1,4 +1,4 @@
-.PHONY: serve drop-db deps compile assets
+.PHONY: serve drop-db deps compile assets build-number
 
 
 PROJ_NAME=whosin
@@ -14,6 +14,10 @@ CLOSURE_COMPILER_RELEASE = 20181008
 CLOSURE_COMPILER = $(ANOMALY_DIR)/bin/closure-compiler-v$(CLOSURE_COMPILER_RELEASE).jar
 CLOSURE_DEPSWRITER=$(CLOSURE_LIBRARY)/closure/bin/build/depswriter.py
 COMPILE_FULL=false
+
+# Closure Stylesheets
+CLOSURE_STYLESHEETS_RELEASE = 1.5.0
+CLOSURE_GSS_COMPILER = $(ANOMALY_DIR)/bin/closure-stylesheets-${CLOSURE_STYLESHEETS_RELEASE}.jar
 
 # Java
 JAVA_VERSION=java-11-openjdk-amd64
@@ -33,6 +37,11 @@ deps:
 	cd client/; python $(CLOSURE_DEPSWRITER) \
 	--root_with_prefix="$(PROJ_NAME) ../../../$(PROJ_NAME)" > $(PROJ_NAME)-deps.js
 
+build-number:
+	rm client/$(PROJ_NAME)/Build.js
+	echo "goog.provide('$(PROJ_NAME).build');\n\ngoog.require('$(PROJ_NAME)');\n\n$(PROJ_NAME).build.NUMBER = `git rev-list --count HEAD`;" > client/$(PROJ_NAME)/Build.js
+
+
 define compile_js_app
 	cd client; $(JAVA) -client -Xmx$(JAVA_HEAP_SIZE) -jar $(CLOSURE_COMPILER) \
 	--compilation_level=$(2) \
@@ -51,26 +60,26 @@ define compile_js_app
 	--js_output_file=../whos-in/static/js/$(PROJ_NAME)-$(4).js
 endef
 
-compile:
-	ifeq ($(COMPILE_FULL), true)
-		$(call compile_js_app,$(PROJ_NAME).ui.Renderer,SIMPLE,uncompiled,lsimple)
-		$(call compile_js_app,$(PROJ_NAME).ui.Renderer,SIMPLE,compiled,simple-minified)
-		$(call compile_js_app,$(PROJ_NAME).ui.Renderer,ADVANCED,uncompiled,advanced)
-	endif
-		$(call compile_js_app,$(PROJ_NAME).ui.Renderer,ADVANCED,compiled,advanced-minified)
+compile: assets
+ifeq ($(COMPILE_FULL), true)
+	$(call compile_js_app,$(PROJ_NAME).ui.Renderer,SIMPLE,uncompiled,lsimple)
+	$(call compile_js_app,$(PROJ_NAME).ui.Renderer,SIMPLE,compiled,simple-minified)
+	$(call compile_js_app,$(PROJ_NAME).ui.Renderer,ADVANCED,uncompiled,advanced)
+endif
+	$(call compile_js_app,$(PROJ_NAME).ui.Renderer,ADVANCED,compiled,advanced-minified)
 
 assets:
 	[ -d client/renaming-maps ] || mkdir client/renaming-maps
-	[ -d whos-in/static/images ] || mkdir whos-in/static/images
-	[ -d whos-in/static/styles ] || mkdir whos-in/static/styles
+	[ -d whosin/static/images ] || mkdir whosin/static/images
+	[ -d whosin/static/styles ] || mkdir whosin/static/styles
 
-	cd whos-in/static/styles; $(JAVA) -jar $(CLOSURE_GSS_COMPILER) \
+	cd whosin/static/styles; $(JAVA) -jar $(CLOSURE_GSS_COMPILER) \
 	--output-renaming-map-format CLOSURE_COMPILED \
 	--rename NONE \
 	--output-renaming-map ../../../client/renaming-maps/uncompiled.js \
 	--output-file $(PROJ_NAME).css ../../../assets/styles/style.css
 
-	cd whos-in/static/styles; $(JAVA) -jar $(CLOSURE_GSS_COMPILER) \
+	cd whosin/static/styles; $(JAVA) -jar $(CLOSURE_GSS_COMPILER) \
 	--output-renaming-map-format CLOSURE_COMPILED \
 	--rename CLOSURE \
 	--output-renaming-map ../../../client/renaming-maps/compiled.js \
