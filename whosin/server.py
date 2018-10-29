@@ -18,7 +18,7 @@ def connect():
 
 @sio.on('login')
 def login(data):
-    from whos_in.data import User, users_schema
+    from whosin.data import User, users_schema
     print("login ", request.sid)
     print(data)
     json_data = json.loads(data)
@@ -36,7 +36,7 @@ def login(data):
 
 @sio.on('inout')
 def inout(data):
-    from whos_in.data import User, users_schema
+    from whosin.data import User, users_schema
     print("inout ", data)
     json_data = json.loads(data)
     user = db.session.query(User).filter(User.name==json_data['name']).first()

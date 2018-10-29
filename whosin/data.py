@@ -1,4 +1,4 @@
-from whos_in.server import db, ma
+from whosin.server import db, ma
 
 class User(db.Model):
 
