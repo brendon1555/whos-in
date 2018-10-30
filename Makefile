@@ -21,14 +21,14 @@ CLOSURE_GSS_COMPILER = $(ANOMALY_DIR)/bin/closure-stylesheets-${CLOSURE_STYLESHE
 
 # Java
 JAVA_VERSION=java-11-openjdk-amd64
-JAVA=/usr/lib/jvm/$(JAVA_VERSION)/bin/java
+JAVA=java
 JAVA_HEAP_SIZE = 2g
 
 serve:
-	cd whos_in; python server.py
+	cd whosin; python server.py
 
 drop-db:
-	rm whos_in/whos_in.db
+	rm whosin/whos_in.db
 
 deps:
 	[ -e client/closure-library ] || ln -s $(CLOSURE_LIBRARY) client/closure-Library
@@ -57,7 +57,7 @@ define compile_js_app
 	--js=$(PROJ_NAME)/**.js \
 	--rename_variable_prefix wi_ \
 	--closure_entry_point=$(1) \
-	--js_output_file=../whos-in/static/js/$(PROJ_NAME)-$(4).js
+	--js_output_file=../whosin/static/js/$(PROJ_NAME)-$(4).js
 endef
 
 compile: assets
