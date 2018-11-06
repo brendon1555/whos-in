@@ -1,5 +1,5 @@
 import json
-from flask import Flask, render_template, url_for, request
+from flask import Flask, render_template, url_for, request, send_from_directory
 from flask_socketio import SocketIO, emit
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
@@ -51,13 +51,18 @@ def inout(data):
 def disconnect():
     print('disconnect ', request.sid)
 
+@app.route('/<path:filename>')
+def files(filename):
+    print(filename)
+    return send_from_directory('..', filename)
+
 @app.route('/')
 def index():
     return render_template('index.html')
 
-with app.test_request_context():
-    url_for('static', filename='scripts.js')
-    url_for('static', filename='socket.io.js')
+# with app.test_request_context():
+#     url_for('static', filename='scripts.js')
+#     url_for('static', filename='socket.io.js')
 
 if __name__ == '__main__':
     sio.run(

@@ -1,3 +1,5 @@
+require("google-closure-library");
+
 /**
  * @fileoverview Globals for whosin
  * @suppress {undefinedVars}

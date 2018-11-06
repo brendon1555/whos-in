@@ -5,7 +5,7 @@ goog.provide('whosin.ui.Renderer');
 
 goog.require('goog.dom.classlist');
 goog.require('goog.ui.Component');
-
+goog.require('goog.global');
 
 /**
  * @constructor
@@ -15,6 +15,11 @@ goog.require('goog.ui.Component');
  */
 whosin.ui.Renderer = function() {
     whosin.ui.Renderer.base(this, 'constructor');
+
+    var io_ = goog.global['io'];
+    this.socket_ = io_('http://'+window.location.hostname+':5000');
+
+    this.logged_in_user_ = {name: ""};
 };
 goog.inherits(whosin.ui.Renderer, goog.ui.Component);
 
@@ -33,6 +38,15 @@ whosin.ui.Renderer.prototype.enterDocument = function() {
     whosin.ui.Renderer.base(this, 'enterDocument');
 
     var element_ = this.getElement();
+
+    this.socket_.on('connect', function(){
+        console.log("connect");
+    });
+    this.socket_.on('disconnect', function(){
+        console.log("dicsonnect");
+    });
+
+    console.log(this.socket_);
 };
 
 /**
