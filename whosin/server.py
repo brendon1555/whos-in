@@ -54,7 +54,7 @@ def disconnect():
 @app.route('/<path:filename>')
 def files(filename):
     print(filename)
-    return send_from_directory('..', filename)
+    return send_from_directory(filename)
 
 @app.route('/')
 def index():

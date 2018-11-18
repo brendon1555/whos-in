@@ -1,3 +1,4 @@
+import io from 'socket.io-client';
 const socket = io('http://'+window.location.hostname+':5000'); // Host needs to be changed at some point
 const logged_in_user = {name: ""};
 
